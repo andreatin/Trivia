@@ -30,7 +30,7 @@ The following **additional** features are implemented:
 
 Here is a reminder on how to embed Loom videos on GitHub. Feel free to remove this reminder once you upload your README. 
 
-[Trivia Walthrough](https://www.loom.com/share/a169610da1314ed095fdb998e2c9f656?sid=2312bfdd-a4e4-45b8-b7f7-589c8cc00a89)
+[Trivia Walkthrough](https://www.loom.com/share/a169610da1314ed095fdb998e2c9f656?sid=2312bfdd-a4e4-45b8-b7f7-589c8cc00a89)
 
 ## Notes
 
