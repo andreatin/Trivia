@@ -7,11 +7,13 @@
 
 import UIKit
 
-var questionCount: Int = 1
-var score: Int = 0
 
 class ViewController: UIViewController {
     
+    private var questions = [Question]()
+    private var questionNum = 0
+    private var score = 0
+    private var currentQuestionIndex = 0
     
     @IBOutlet weak var QuestionNumLabel: UILabel!
     
@@ -24,223 +26,138 @@ class ViewController: UIViewController {
     
     
     
+    
     @IBAction func ButtonAPressed(_ sender: UIButton) {
-        if(questionCount == 1)
-        {
-            if(ButtonA.titleLabel?.text == "Brazil")
-            {
-                score += 1
-            }
-            questionCount += 1;
-            determineQuestion(parameter: questionCount)
-            
-        }
-        else if (questionCount == 2)
-        {
-            if(ButtonA.titleLabel?.text == "Mickey Mouse")
-            {
-                score += 1
-            }
-            questionCount += 1;
-            determineQuestion(parameter: questionCount)
-            
-        }
-        else if(questionCount == 3)
-        {
-            if(ButtonA.titleLabel?.text == "Orlando")
-            {
-                score += 1
-            }
-            questionCount += 1
-            determineQuestion(parameter: questionCount)
-        }
-        else
-        {
-            determineQuestion(parameter: questionCount)
-        }
-        
+        updateToNextQuestion(answer: sender.titleLabel?.text ?? "")
         
     }
     
     @IBAction func ButtonBPressed(_ sender: UIButton) {
-        if(questionCount == 1)
-        {
-            if(ButtonB.titleLabel?.text == "Brazil")
-            {
-                score += 1
-            }
-            questionCount += 1;
-            determineQuestion(parameter: questionCount)
-        }
-        else if (questionCount == 2)
-        {
-            if(ButtonB.titleLabel?.text == "Mickey Mouse")
-            {
-                score += 1
-            }
-            questionCount += 1;
-            determineQuestion(parameter: questionCount)
-        }
-        else if(questionCount == 3)
-        {
-            if(ButtonB.titleLabel?.text == "Orlando")
-            {
-                score += 1
-            }
-            questionCount += 1
-            determineQuestion(parameter: questionCount)
-        }
-        else
-        {
-            determineQuestion(parameter: questionCount)
-        }
-   
+        updateToNextQuestion(answer: sender.titleLabel?.text ?? "")
     }
     
     
     @IBAction func ButtonCPressed(_ sender: UIButton) {
-        if(questionCount == 1)
-        {
-            if(ButtonC.titleLabel?.text == "Brazil")
-            {
-                score += 1
-            }
-            questionCount += 1;
-            determineQuestion(parameter: questionCount)
-        }
-        else if (questionCount == 2)
-        {
-            if(ButtonC.titleLabel?.text == "Mickey Mouse")
-            {
-                score += 1
-            }
-            questionCount += 1;
-            determineQuestion(parameter: questionCount)
-        }
-        else if(questionCount == 3)
-        {
-            if(ButtonC.titleLabel?.text == "Orlando")
-            {
-                score += 1
-            }
-            questionCount += 1
-            determineQuestion(parameter: questionCount)
-        }
-        else
-        {
-            determineQuestion(parameter: questionCount)
-        }
-      
+        updateToNextQuestion(answer: sender.titleLabel?.text ?? "")
+        
     }
     
     
     @IBAction func ButtonDPressed(_ sender: UIButton) {
-        if(questionCount == 1)
-        {
-            if(ButtonD.titleLabel?.text == "Brazil")
-            {
-                score += 1
-            }
-            questionCount += 1;
-            determineQuestion(parameter: questionCount)
-        }
-        else if (questionCount == 2)
-        {
-            if(ButtonD.titleLabel?.text == "Mickey Mouse")
-            {
-                score += 1
-            }
-            questionCount += 1;
-            determineQuestion(parameter: questionCount)
-        }
-        else if(questionCount == 3)
-        {
-            if(ButtonD.titleLabel?.text == "Orlando")
-            {
-                score += 1
-            }
-            questionCount += 1
-            determineQuestion(parameter: questionCount)
-        }
-        else
-        {
-            determineQuestion(parameter: questionCount)
-        }
+        updateToNextQuestion(answer: sender.titleLabel?.text ?? "")
         
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        updateQuestion(withQuestionIndex: 0) // when the view loads, make sure the first location is shown
+        updateQuestion(withQuestionIndex: 0)
+        
+        fetchQuestions()
+    }
     
-    func determineQuestion(parameter: Int){
-        
-        let Question1: String = "What is the largest country in South America?"
-        let Question2: String = "What is the name of the disney character who has a clubhouse?"
-        let Question3: String = "Where is Disney World located?"
-        
-        if(questionCount == 1)
-        {
-            QuestionNumLabel.text = "Question 1/3"
-            QuestionLabel.text = Question1
-            ButtonA.setTitle("Brazil", for: .normal)
-            ButtonB.setTitle("Ecuador", for: .normal)
-            ButtonC.setTitle("Argentina", for: .normal)
-            ButtonD.setTitle("Colombia", for: .normal)
-           
+    private func fetchQuestions() {
+        let networkService = QuestionNetworkService(  )
+        networkService.fetchData { [weak self] (APIQuestions) in
+            guard let strongSelf = self, let fetched = APIQuestions else { return }
+            DispatchQueue.main.async {
+                strongSelf.questions = fetched
+                strongSelf.updateQuestion(withQuestionIndex: strongSelf.currentQuestionIndex)
+            }
         }
-        else if(questionCount == 2)
-        {
-            QuestionNumLabel.text = "Question 2/3"
-            QuestionLabel.text = Question2
+    }
+    
+    private func updateQuestion(withQuestionIndex questionIndex: Int) {
+        DispatchQueue.main.async {
+            self.QuestionNumLabel.text = "Question: \(questionIndex + 1)/\(self.questions.count)"
             
-            ButtonA.setTitle("Donald Duck", for: .normal)
-            ButtonB.setTitle("Mickey Mouse", for: .normal)
-            ButtonC.setTitle("Goofy", for: .normal)
-            ButtonD.setTitle("Daisy", for: .normal)
+            guard questionIndex < self.questions.count else { return }
             
+            let question = self.questions[questionIndex]
+            self.configure(with: question)
         }
-        else if(questionCount == 3)
-        {
-            QuestionNumLabel.text = "Question 3/3"
-            QuestionLabel.text = Question3
-            
-            ButtonA.setTitle("Atlanta", for: .normal)
-            ButtonB.setTitle("Miami", for: .normal)
-            ButtonC.setTitle("Orlando", for: .normal)
-            ButtonD.setTitle("New York", for: .normal)
-              
+    }
+    
+    private func updateToNextQuestion(answer: String) {
+        let correct = checkCorrectAnswer(answer)
+        if correct {
+            score += 1
+        }
+        questionNum += 1
+        
+        if questionNum < questions.count {
+            updateQuestion(withQuestionIndex: questionNum)
+            ButtonC.isHidden = false
+            ButtonD.isHidden = true
         }
         else
         {
             showScore()
         }
+    }
+    
+    private func checkCorrectAnswer(_ answer: String) -> Bool {
+        return answer == questions[questionNum].correctAnswer
+    }
+    
+    private func resetGame() {
+        questionNum = 0
+        score = 0
+        fetchQuestions()
+    }
+    
+    
+    private func configure(with question: Question) {
+        
+        QuestionLabel.text = question.question.decoded
+        
+        let answers: [String]
+        if(question.type == .boolean) {
+            answers = [question.correctAnswer, question.incorrectAnswers.first!].shuffled()
+            ButtonC.isHidden = true
+            ButtonD.isHidden = true
+        } else {
+            answers = ([question.correctAnswer] + question.incorrectAnswers).shuffled() // Properly concatenate arrays
+            ButtonC.isHidden = false
+            ButtonD.isHidden = false
+        }
+        
+        ButtonA.setTitle(answers[0].decoded, for: .normal)
+        ButtonB.setTitle(answers[1].decoded, for: .normal)
+        
+        if question.type != .boolean {
+            ButtonC.setTitle(answers[2].decoded, for: .normal) // decode HTML entities
+            ButtonD                                     .setTitle(answers[3].decoded, for: .normal) // decode HTML entities
+            
+        }
+        
         
     }
     
+    
     func showScore() {
-        let alertController = UIAlertController(title: "Total Points", message: "You got \(score)/3 questions correct", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Total Points", message: "You got \(score)/ \(questions.count) questions correct", preferredStyle: .alert)
         
-        let okAction = UIAlertAction(title: "OK", style: .default)
-        alertController.addAction(okAction)
+        let playAgainAction = UIAlertAction(title: "Play Again", style: .default)
+        alertController.addAction(playAgainAction)
+        self.resetGame()
         present(alertController, animated: true, completion: nil)
     }
     
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
+    extension String {
+        var decoded: String {
+            guard let data = data(using: .utf8) else {return self}
+            let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+                .documentType: NSAttributedString.DocumentType.html,
+                .characterEncoding: String.Encoding.utf8.rawValue
+            ]
+            guard let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) else {
+                return self
+            }
+            return attributedString.string
+        }
+        
+    }
+    
+
