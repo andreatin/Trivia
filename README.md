@@ -1,26 +1,27 @@
-# Project 3 - *Trivia*
+# Project 4 - *Trivia*
 
 Submitted by: **Andrea Tinsley**
 
-**Trivia** is an app that displays different questions and answer choices and calculates the amount of correct answers
+**Trivia** is an app that displays a set number of trivia questions (both true and false) that are called from the Open Trivia DB 
 
-Time spent: **10** hours spent in total
+Time spent: **20** hours spent in total
 
 ## Required Features
 
 The following **required** functionality is completed:
 
-- [x] User can view the current question and 4 different answers
-- [x] User can view the next question after tapping an answer
-- [x] User can answer at least 3 different questions
+- [x] User can view and answer at least 5 trivia questions.
+- [x] App retrieves question data from the Open Trivia Database API.
+- [x] Fetch a different set of questions if the user indicates they would like to reset the game.
+- [x] Users can see score after submitting all questions.
+- [x] True or False questions only have two options.
 
 
 The following **optional** features are implemented:
 
-- [ ] User can use the vertical orientation of the app on any device
-- [ ] User can track the question they are on and how many questions are left
-- [ ] User can see how many questions they got correct after answering all questions
-- [ ] User should be able to restart the game after they've finished answering all questions
+  
+- [ ] Allow the user to choose a specific category of questions.
+- [ ] Provide the user feedback on whether each question was correct before navigating to the next.
 
 The following **additional** features are implemented:
 
@@ -28,13 +29,11 @@ The following **additional** features are implemented:
 
 ## Video Walkthrough
 
-Here is a reminder on how to embed Loom videos on GitHub. Feel free to remove this reminder once you upload your README. 
-
-[Trivia Walkthrough](https://www.loom.com/share/a169610da1314ed095fdb998e2c9f656?sid=2312bfdd-a4e4-45b8-b7f7-589c8cc00a89)
+[video walkthrough](https://www.loom.com/share/dc7bf7baa0d04293a89daa3856df01b1) .
 
 ## Notes
 
-My main challenge was in getting all the elements to display the correct things at the same time and at the right times. I took half of the time working on this project just figuring that out. At the end I did have a bug when calculating the score, but was able to get that working by realizing I was calling a function twice causing it to go past the calculation of one of the questions. 
+Encountered huge challenges with combining all the elements read from the JSON response into the frontend due to mixups with variable names and structs 
 
 ## License
 
