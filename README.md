@@ -1,14 +1,14 @@
-# Project 4 - *Trivia*
+# *Trivia*
 
-Submitted by: **Andrea Tinsley**
+Built by: **Andrea Tinsley**
 
 **Trivia** is an app that displays a set number of trivia questions (both true and false) that are called from the Open Trivia DB 
 
 Time spent: **20** hours spent in total
 
-## Required Features
+## Features
 
-The following **required** functionality is completed:
+The following functionality is completed:
 
 - [x] User can view and answer at least 5 trivia questions.
 - [x] App retrieves question data from the Open Trivia Database API.
@@ -16,19 +16,7 @@ The following **required** functionality is completed:
 - [x] Users can see score after submitting all questions.
 - [x] True or False questions only have two options.
 
-
-The following **optional** features are implemented:
-
-  
-- [ ] Allow the user to choose a specific category of questions.
-- [ ] Provide the user feedback on whether each question was correct before navigating to the next.
-
-The following **additional** features are implemented:
-
-- [ ] List anything else that you can get done to improve the app functionality!
-
 ## Video Walkthrough
-
 [video walkthrough](https://www.loom.com/share/dc7bf7baa0d04293a89daa3856df01b1) .
 
 ## Notes
